@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>minimal-react-blog</title>
+  </head>
+  <body>
+    <div id="react-app">
+
+    <script src="https://cdn.jsdelivr.net/marked/0.3.1/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react.js"></script>
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react-dom.js"></script>
+    <script>
+var Application = React.createClass({
+  propTypes: {
+    location: React.PropTypes.string.isRequired,
+    isHashBasedAjax: React.PropTypes.bool.isRequired
+  },
+  transitionProps: function(title){
+    return this.props.isHashBasedAjax
+      ? {href: "#"+title}
+      : {onClick: function(){history.pushState(null,null,title);navigated() } } 
+  },
+  render: function(){
+    page = this.props.isHashBasedAjax || this.props.location
+      ? this.props.location.split('#').pop()
+      : window.location.pathname.split('/').pop().split('#').shift()
+    switch(page) {
+    case '':
+    case 'index.html':
+      section = React.createElement('section', {},
+        "This is sample TOP PAGE. For more information, visit here:",
+        React.createElement('a', {href:'https://github.com/remore/minimal-react-blog'}, 'GitHub repo')
+      );
+      break;
+    case 'list':
+      section = React.createElement('section', {},
+        React.createElement(BlogListView,
+          Object.assign({}, this.props,
+            {transitionProps:this.transitionProps}
+          )
+        )
+      );
+      break;
+    default:
+      section = React.createElement('section', {},
+        React.createElement(BlogView,
+          Object.assign({}, this.props, 
+            {blog:this.props.blogs.filter(function(blog){ return blog.slug==page?blog:null})[0]}
+          )
+        )
+      )
+    }
+    return React.createElement('container', {},
+      React.createElement('header', {},
+        React.createElement('h1', {}, 
+          React.createElement('a', this.transitionProps('index.html'), 'ABC Company Blog')
+        )
+      ),
+      React.createElement('nav', {},
+        React.createElement('ul', {},
+          React.createElement('li', {}, React.createElement('a', this.transitionProps('index.html'), 'Home')),
+          React.createElement('li', {}, React.createElement('a', this.transitionProps('about'), 'About')),
+          React.createElement('li', {}, React.createElement('a', this.transitionProps('list'), 'Blog'))
+        )
+      ),
+      section
+    )
+  }
+})
+
+var BlogItem = React.createClass({
+    propTypes: {
+      date: React.PropTypes.string.isRequired,
+      slug: React.PropTypes.string.isRequired,
+      title: React.PropTypes.string.isRequired,
+      text: React.PropTypes.string.isRequired,
+    },
+    render: function(){
+      return (
+        React.createElement('div', {},
+          React.createElement('h2', {}, this.props.title),
+          React.createElement('p', {}, this.props.date),
+          React.createElement('span', {dangerouslySetInnerHTML:{__html:marked(this.props.text)}})
+        )
+      )
+    }
+  })
+
+var BlogListView = React.createClass({
+  propTypes: {
+    blogs: React.PropTypes.array.isRequired,
+    transitionProps: React.PropTypes.func.isRequired
+  },
+  render: function(){
+    var self = this;
+    var blogItemElements = this.props.blogs
+      .map(function(blog) {
+        return React.createElement('div', blog,
+          React.createElement('h2', {},
+            React.createElement('a', self.props.transitionProps(blog.slug), blog.date + ': ' + blog.title)
+          )
+        )
+      })
+    return React.createElement('section', {}, blogItemElements)
+  }
+})
+
+var BlogView = React.createClass({
+  propTypes: {
+    blog: React.PropTypes.object.isRequired,
+  },
+  render: function(){
+    var blogItemElements = this.props.blogs
+      .map(function(blog) { return React.createElement( BlogItem, blog) })
+    return React.createElement('section', {},
+      React.createElement(BlogItem, this.props.blog)
+    )
+  }
+})
+
+
+/*
+ * Actions
+ */
+function navigated(){
+  setState({location:window.location.hash})
+}
+
+/*
+ * Model
+ */
+var state = {
+  blogs: [
+    {key: 1, date: "2002.11.06", slug: "about", title: "About Us", text: "This blog post is **about us** page."},
+    {key: 2, date: "2016.06.30", slug: "attended-some-conference-2016", title: "Attended some-tech Conference 2016!", text: "## That was awesome \n\n lorem ipsum dolor sit amet consectetur adipiscing elit.\n\n```\ni=100\nputs 'hoge'```"},
+  ],
+  location: window.location.hash,
+  isHashBasedAjax: false
+};
+
+function setState(changes){
+  var component;
+  Object.assign(state, changes);
+  ReactDOM.render(
+    React.createElement(Application, state),
+    document.getElementById('react-app')
+  )
+}
+
+window.addEventListener('hashchange', navigated, false);
+window.addEventListener('popstate', navigated, false);
+
+navigated()
+
+    </script>
+  </body>
+</html>
