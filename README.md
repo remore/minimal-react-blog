@@ -41,12 +41,12 @@ Following documentation will give you great introduction to start configuration.
 
 ## Acknowledgement 
 
-Without @jamesknelson's following series of great posts, this idea would not have been realized. Thanks @jamesknelson!
+Without [@jamesknelson](http://github.com/jamesknelson)'s following series of great posts, this idea would not have been realized. Thanks @jamesknelson!
 
-- (Learn React By Itself -- no JSX, no Flux, no ES6, no Webpack)[http://jamesknelson.com/learn-raw-react-no-jsx-flux-es6-webpack/]
-- (Learn Raw React: Ridiculously Simple Forms)[http://jamesknelson.com/learn-raw-react-ridiculously-simple-forms/]
-- (React and pushState: You’re doing it wrong)[http://jamesknelson.com/push-state-vs-hash-based-routing-with-react-js/]
-- (Building a Router with Raw React)[http://jamesknelson.com/routing-with-raw-react/]
+- [Learn React By Itself -- no JSX, no Flux, no ES6, no Webpack](http://jamesknelson.com/learn-raw-react-no-jsx-flux-es6-webpack/)
+- [Learn Raw React: Ridiculously Simple Forms](http://jamesknelson.com/learn-raw-react-ridiculously-simple-forms/)
+- [React and pushState: You’re doing it wrong](http://jamesknelson.com/push-state-vs-hash-based-routing-with-react-js/)
+- [Building a Router with Raw React](http://jamesknelson.com/routing-with-raw-react/)
 
 ## LICENSE
 
